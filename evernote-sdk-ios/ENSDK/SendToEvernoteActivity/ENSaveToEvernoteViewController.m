@@ -124,6 +124,8 @@ CGFloat kTextLeftPadding = 20;
     self.saveButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(save:)];
     self.navigationItem.rightBarButtonItem = self.saveButtonItem;
     
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    
     self.saveButtonItem.enabled = NO;
     self.titleField.text = [self.delegate defaultNoteTitleForViewController:self];
     [self.titleField setPlaceholder:ENSDKLocalizedString(@"Add Title", @"Add Title")];
