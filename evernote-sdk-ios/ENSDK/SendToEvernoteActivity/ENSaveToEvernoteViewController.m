@@ -47,7 +47,7 @@ CGFloat kTextLeftPadding = 20;
 - (ENNote *)preparedNote;
 @end
 
-@interface ENSaveToEvernoteViewController () <ENNotebookChooserViewControllerDelegate>
+@interface ENSaveToEvernoteViewController () <ENNotebookChooserViewControllerDelegate, UIWebViewDelegate>
 @property (nonatomic, strong) UIBarButtonItem * saveButtonItem;
 @property (nonatomic, strong) UITextField * titleField;
 @property (nonatomic, strong) UITextField * notebookField;
@@ -103,6 +103,7 @@ CGFloat kTextLeftPadding = 20;
     [self.view addSubview:divider3];
     
     UIWebView *noteView = [[UIWebView alloc] initWithFrame:CGRectZero];
+    noteView.delegate = self;
     noteView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:noteView];
     self.noteView = noteView;
@@ -228,6 +229,22 @@ CGFloat kTextLeftPadding = 20;
     self.currentNotebook = notebook;
     [self updateCurrentNotebookDisplay];
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - UIWebViewDelegate
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+    if (navigationType == UIWebViewNavigationTypeLinkClicked) {
+        // Disable link navigation since there is no way to go backward.
+        return NO;
+    } else {
+        return YES;
+    }
+}
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView {
+    // Disable popup menu on links.
+    [webView stringByEvaluatingJavaScriptFromString:@"document.documentElement.style.webkitTouchCallout='none';"];
 }
 
 @end
